@@ -9,22 +9,17 @@ app = Flask(__name__)
 #Install required dependencies
 app.config['MAX_CONTENT_LENGHT']= 16 * 1024 #set maximum file size to 16MB
 # Write file manipulation functions
-def pdf_to_word(input_pdf, output_pdf):
-    #Read the pdf file
-    with open(input_pdf, 'rb') as f:
-        pdf_reader = PyPDF2.Pdfreader(f)
+def convert_pdf_to_word(input_file, output_file):
+    with open(input_file, 'rb') as f_in:
+        pdf = PyMuPDF.fitz.open(f_in)
 
-        #create a new word document
-        document = docx.Document()
+        # Convert each page of the PDF to Word format
+        for page in pdf:
+            doc = Document()
+            doc.add_paragraph(page.get_text())
 
-        #Extract text from each page in the PDF
-        for page in pdf_reader.pages:
-            text= page.extract_text()
-            document.add_paragraph(text)
-
-        #Save the Word document
-         document.save(output_docx)
-
+            # Save the Word document
+            doc.save(output_file)
     def word_to_pdf(input_docx, out_pdf):
         #Create a COM object for Word 
         word = comtypes.client.CreateObject('Word.Application')
