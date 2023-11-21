@@ -39,4 +39,22 @@ def pdf_to_word(input_pdf, output_pdf):
         word.Quit()
 
 
+# Define routes for PDF to Word and Word to PDF conversions
+@app.route('/pdf/to-word', methods=['POST'])
+def pdf_to_word_endpoint():
+    if request.method == 'POST':
+        if 'file' not in request.files:
+            return jsonify({'error': 'No file uploaded'}), 400
+
+        file = request.files['file']
+        if file.filename.endswith('.pdf'):
+            input_pdf = file
+            output_docx = 'output.docx'
+
+            # Convert PDF to Word
+            pdf_to_word(input_pdf, output_docx)
+
+            return send_file(output_docx, as_attachment=True), 200
+        else:
+            return jsonify({'error': 'Invalid file format'}), 400
                
