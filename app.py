@@ -76,4 +76,8 @@ def word_to_pdf_endpoint():
 
             return send_file(output_pdf, as_attachment=True), 200
         else:
-            return jsonify({'error': 'Invalid file format'}), 400               
+            return jsonify({'error': 'Invalid file format'}), 400
+
+
+if __name__ == '__main__':
+    app.run(debug=True)
