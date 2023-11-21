@@ -57,4 +57,23 @@ def pdf_to_word_endpoint():
             return send_file(output_docx, as_attachment=True), 200
         else:
             return jsonify({'error': 'Invalid file format'}), 400
-               
+
+# Define route for Word to pdf conversion
+
+@app.route('/word/to-pdf', methods=['POST'])
+def word_to_pdf_endpoint():
+    if request.method == 'POST':
+        if 'file' not in request.files:
+            return jsonify({'error': 'No file uploaded'}), 400
+
+        file = request.files['file']
+        if file.filename.endswith('.docx'):
+            input_docx = file
+            output_pdf = 'output.pdf'
+
+            # Convert Word to PDF
+            word_to_pdf(input_docx, output_pdf)
+
+            return send_file(output_pdf, as_attachment=True), 200
+        else:
+            return jsonify({'error': 'Invalid file format'}), 400               
